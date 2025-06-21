@@ -60,7 +60,7 @@ h1 {
     color: #374151;
 }
 
-#input-text {
+#input-text, #input-text-graph {
     width: 100%;
     height: 400px;
     padding: 1rem;
@@ -72,7 +72,7 @@ h1 {
     background-color: #f9fafb;
 }
 
-#input-text:focus {
+#input-text:focus, #input-text-graph:focus {
     outline: none;
     border-color: #3b82f6;
 }
@@ -206,4 +206,179 @@ select, input[type="range"] {
 
 .reading-mode-bold .ct-chunk {
     font-weight: 500;
+}
+
+/* Tab Interface */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #e5e7eb;
+    background: white;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #6b7280;
+}
+
+.tab-btn:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.tab-btn.active {
+    border-color: #3b82f6;
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Mode Content */
+.mode-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ReadGraph Specific Styles */
+.graph-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.navigation-info {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.navigation-info kbd {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.sentence-counter {
+    color: #374151;
+    font-weight: 500;
+}
+
+.graph-content {
+    height: 400px;
+    overflow: hidden;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+    position: relative;
+}
+
+/* Graph Visualization */
+.graph-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.graph-node {
+    cursor: default;
+}
+
+.graph-node text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.graph-link {
+    fill: none;
+    stroke: #9ca3af;
+    stroke-width: 2px;
+}
+
+.graph-node-rect {
+    rx: 6;
+    ry: 6;
+    stroke: #e5e7eb;
+    stroke-width: 1px;
+}
+
+/* Graph node colors based on ct-chunk types */
+.graph-node.ct-subject .graph-node-rect {
+    fill: rgba(37, 99, 235, 0.1);
+    stroke: var(--color-subject);
+}
+
+.graph-node.ct-subject text {
+    fill: var(--color-subject);
+}
+
+.graph-node.ct-object .graph-node-rect {
+    fill: rgba(5, 150, 105, 0.1);
+    stroke: var(--color-object);
+}
+
+.graph-node.ct-object text {
+    fill: var(--color-object);
+}
+
+.graph-node.ct-verb-phrase .graph-node-rect {
+    fill: rgba(251, 191, 36, 0.1);
+    stroke: var(--color-verb-phrase);
+}
+
+.graph-node.ct-verb-phrase text {
+    fill: var(--color-verb-phrase);
+}
+
+.graph-node.ct-prep-phrase .graph-node-rect {
+    fill: rgba(244, 114, 182, 0.1);
+    stroke: var(--color-prep-phrase);
+}
+
+.graph-node.ct-prep-phrase text {
+    fill: var(--color-prep-phrase);
+}
+
+.graph-node.ct-connector .graph-node-rect {
+    fill: rgba(124, 58, 237, 0.1);
+    stroke: var(--color-connector);
+}
+
+.graph-node.ct-connector text {
+    fill: var(--color-connector);
+}
+
+.graph-node.ct-modifier .graph-node-rect {
+    fill: rgba(180, 83, 9, 0.1);
+    stroke: var(--color-modifier);
+}
+
+.graph-node.ct-modifier text {
+    fill: var(--color-modifier);
+}
+
+.graph-node.ct-indirect-object .graph-node-rect {
+    fill: rgba(220, 38, 38, 0.1);
+    stroke: var(--color-indirect-object);
+}
+
+.graph-node.ct-indirect-object text {
+    fill: var(--color-indirect-object);
 }
