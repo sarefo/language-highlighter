@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadFlow - Natural Language Syntax Highlighter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        .panel-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+
+        #input-text {
+            width: 100%;
+            height: 400px;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            background-color: #f9fafb;
+        }
+
+        #input-text:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .reader-content {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        /* ReadFlow Syntax Highlighting */
+        .ct-chunk {
+            transition: all 0.2s ease;
+            padding: 0.05em 0.1em;
+            border-radius: 3px;
+            cursor: default;
+        }
+
+        .ct-chunk:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .ct-noun-phrase {
+            color: #2563eb;
+        }
+
+        .ct-verb-phrase {
+            color: #dc2626;
+        }
+
+        .ct-prep-phrase {
+            color: #059669;
+        }
+
+        .ct-connector {
+            color: #7c3aed;
+            font-weight: 500;
+        }
+
+        .ct-modifier {
+            color: #ea580c;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        select, input[type="range"] {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .instructions {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #1e40af;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ReadFlow</h1>
+            <p class="subtitle">Natural Language Syntax Highlighting for Enhanced Reading</p>
+        </header>
+
+        <div class="app-grid">
+            <div class="panel">
+                <h2 class="panel-header">Input</h2>
+                <div class="instructions">
+                    Paste your marked-up text below (with &lt;span class="ct-chunk ct-[type]"&gt; tags)
+                </div>
+                <textarea id="input-text" placeholder="Paste your marked-up text here..."></textarea>
+            </div>
+
+            <div class="panel">
+                <h2 class="panel-header">ReadFlow Preview</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="reading-mode">Mode:</label>
+                        <select id="reading-mode">
+                            <option value="normal">Normal</option>
+                            <option value="subtle">Subtle</option>
+                            <option value="bold">Bold</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="font-size">Size:</label>
+                        <input type="range" id="font-size" min="14" max="24" value="18">
+                    </div>
+                </div>
+                <div id="reader" class="reader-content">
+                    <p style="color: #9ca3af; text-align: center; margin-top: 150px;">
+                        Your highlighted text will appear here...
+                    </p>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #2563eb;"></div>
+                        <span>Noun phrases</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #dc2626;"></div>
+                        <span>Verb phrases</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #059669;"></div>
+                        <span>Prepositional phrases</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #7c3aed;"></div>
+                        <span>Connectors</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #ea580c;"></div>
+                        <span>Modifiers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputText = document.getElementById('input-text');
+        const reader = document.getElementById('reader');
+        const readingMode = document.getElementById('reading-mode');
+        const fontSize = document.getElementById('font-size');
+
+        // Update reader content when input changes
+        inputText.addEventListener('input', updateReader);
+        inputText.addEventListener('paste', () => {
+            setTimeout(updateReader, 10);
+        });
+
+        // Update reading mode
+        readingMode.addEventListener('change', () => {
+            reader.className = `reader-content reading-mode-${readingMode.value}`;
+        });
+
+        // Update font size
+        fontSize.addEventListener('input', () => {
+            reader.style.fontSize = `${fontSize.value}px`;
+        });
+
+        function updateReader() {
+            const text = inputText.value.trim();
+            if (!text) {
+                reader.innerHTML = '<p style="color: #9ca3af; text-align: center; margin-top: 150px;">Your highlighted text will appear here...</p>';
+                return;
+            }
+            
+            // Simply insert the HTML content
+            reader.innerHTML = text;
+        }
+
+        // Add CSS for reading modes
+        const style = document.createElement('style');
+        style.textContent = `
+            .reading-mode-subtle .ct-chunk {
+                opacity: 0.8;
+            }
+            
+            .reading-mode-bold .ct-chunk {
+                font-weight: 500;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
